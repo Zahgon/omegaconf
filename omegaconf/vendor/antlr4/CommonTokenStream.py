@@ -76,12 +76,4 @@ class CommonTokenStream(BufferedTokenStream):
 
     # Count EOF just once.#/
     def getNumberOfOnChannelTokens(self):
-        n = 0
-        self.fill()
-        for i in range(0, len(self.tokens)):
-            t = self.tokens[i]
-            if t.channel==self.channel:
-                n += 1
-            if t.type==Token.EOF:
-                break
-        return n
+        pass

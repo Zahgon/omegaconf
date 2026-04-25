@@ -44,22 +44,13 @@ class Recognizer(object):
         self._listeners.append(listener)
 
     def removeErrorListener(self, listener):
-        self._listeners.remove(listener)
+        pass
 
     def removeErrorListeners(self):
         self._listeners = []
 
     def getTokenTypeMap(self):
-        tokenNames = self.getTokenNames()
-        if tokenNames is None:
-            from .error.Errors import UnsupportedOperationException
-            raise UnsupportedOperationException("The current recognizer does not provide a list of token names.")
-        result = self.tokenTypeMapCache.get(tokenNames, None)
-        if result is None:
-            result = zip( tokenNames, range(0, len(tokenNames)))
-            result["EOF"] = Token.EOF
-            self.tokenTypeMapCache[tokenNames] = result
-        return result
+        pass
 
     # Get a map from rule names to rule indexes.
     #
@@ -77,18 +68,12 @@ class Recognizer(object):
         return result
 
     def getTokenType(self, tokenName:str):
-        ttype = self.getTokenTypeMap().get(tokenName, None)
-        if ttype is not None:
-            return ttype
-        else:
-            return Token.INVALID_TYPE
+        pass
 
 
     # What is the error header, normally line/character position information?#
     def getErrorHeader(self, e:RecognitionException):
-        line = e.getOffendingToken().line
-        column = e.getOffendingToken().column
-        return "line "+line+":"+column
+        pass
 
 
     # How should a token be displayed in an error message? The default
@@ -131,7 +116,7 @@ class Recognizer(object):
 
     @property
     def state(self):
-        return self._stateNumber
+        pass
 
     # Indicate that the recognizer has changed internal state that is
     #  consistent with the ATN state passed in.  This way we always know
@@ -142,6 +127,6 @@ class Recognizer(object):
 
     @state.setter
     def state(self, atnState:int):
-        self._stateNumber = atnState
+        pass
 
 del RecognitionException

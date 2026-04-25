@@ -624,20 +624,7 @@ class DictConfig(BaseContainer, MutableMapping[Any, Any]):
         the runtime structured-type of a DictConfig.
         It will change the type and add the additional fields based on the input class or object
         """
-        if type_or_prototype is None:
-            return
-        if not is_structured_config(type_or_prototype):
-            raise ValueError(f"Expected structured config class: {type_or_prototype}")
-
-        from omegaconf import OmegaConf
-
-        proto: DictConfig = OmegaConf.structured(type_or_prototype)
-        object_type = proto._metadata.object_type
-        # remove the type to prevent assignment validation from rejecting the promotion.
-        proto._metadata.object_type = None
-        self.merge_with(proto)
-        # restore the type.
-        self._metadata.object_type = object_type
+        pass
 
     def _set_value(self, value: Any, flags: Optional[Dict[str, bool]] = None) -> None:
         previous_content = self.__dict__["_content"]
@@ -697,27 +684,7 @@ class DictConfig(BaseContainer, MutableMapping[Any, Any]):
 
     @staticmethod
     def _dict_conf_eq(d1: "DictConfig", d2: "DictConfig") -> bool:
-        d1_none = d1.__dict__["_content"] is None
-        d2_none = d2.__dict__["_content"] is None
-        if d1_none and d2_none:
-            return True
-        if d1_none != d2_none:
-            return False
-
-        assert isinstance(d1, DictConfig)
-        assert isinstance(d2, DictConfig)
-        if len(d1) != len(d2):
-            return False
-        if d1._is_missing() or d2._is_missing():
-            return d1._is_missing() is d2._is_missing()
-
-        for k, v in d1.items_ex(resolve=False):
-            if k not in d2.__dict__["_content"]:
-                return False
-            if not BaseContainer._item_eq(d1, k, d2, k):
-                return False
-
-        return True
+        pass
 
     def _to_object(self) -> Any:
         """

@@ -114,10 +114,10 @@ class ATNConfigSet(object):
         return config
 
     def getStates(self):
-        return set(c.state for c in self.configs)
+        pass
 
     def getPredicates(self):
-        return list(cfg.semanticContext for cfg in self.configs if cfg.semanticContext!=SemanticContext.NONE)
+        pass
 
     def get(self, i:int):
         return self.configs[i]
@@ -131,9 +131,7 @@ class ATNConfigSet(object):
             config.context = interpreter.getCachedContext(config.context)
 
     def addAll(self, coll:list):
-        for c in coll:
-            self.add(c)
-        return False
+        pass
 
     def __eq__(self, other):
         if self is other:
@@ -159,7 +157,7 @@ class ATNConfigSet(object):
         return self.hashConfigs()
 
     def hashConfigs(self):
-        return reduce(lambda h, cfg: hash((h, cfg)), self.configs, 0)
+        pass
 
     def __len__(self):
         return len(self.configs)

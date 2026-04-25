@@ -189,19 +189,15 @@ class Lexer(Recognizer, TokenSource):
     # Set the char stream and reset the lexer#/
     @property
     def inputStream(self):
-        return self._input
+        pass
 
     @inputStream.setter
     def inputStream(self, input:InputStream):
-        self._input = None
-        self._tokenFactorySourcePair = (self, self._input)
-        self.reset()
-        self._input = input
-        self._tokenFactorySourcePair = (self, self._input)
+        pass
 
     @property
     def sourceName(self):
-        return self._input.sourceName
+        pass
 
     # By default does not support multiple emits per nextToken invocation
     #  for efficiency reasons.  Subclass and override self method, nextToken,
@@ -233,27 +229,27 @@ class Lexer(Recognizer, TokenSource):
 
     @property
     def type(self):
-        return self._type
+        pass
 
     @type.setter
     def type(self, type:int):
-        self._type = type
+        pass
 
     @property
     def line(self):
-        return self._interp.line
+        pass
 
     @line.setter
     def line(self, line:int):
-        self._interp.line = line
+        pass
 
     @property
     def column(self):
-        return self._interp.column
+        pass
 
     @column.setter
     def column(self, column:int):
-        self._interp.column = column
+        pass
 
     # What is the index of the current character of lookahead?#/
     def getCharIndex(self):
@@ -263,27 +259,19 @@ class Lexer(Recognizer, TokenSource):
     #  text override.
     @property
     def text(self):
-        if self._text is not None:
-            return self._text
-        else:
-            return self._interp.getText(self._input)
+        pass
 
     # Set the complete text of self token; it wipes any previous
     #  changes to the text.
     @text.setter
     def text(self, txt:str):
-        self._text = txt
+        pass
 
     # Return a list of all Token objects in input char stream.
     #  Forces load of all tokens. Does not include EOF token.
     #/
     def getAllTokens(self):
-        tokens = []
-        t = self.nextToken()
-        while t.type!=Token.EOF:
-            tokens.append(t)
-            t = self.nextToken()
-        return tokens
+        pass
 
     def notifyListeners(self, e:LexerNoViableAltException):
         start = self._tokenStartCharIndex
@@ -312,7 +300,7 @@ class Lexer(Recognizer, TokenSource):
             return c
 
     def getCharErrorDisplay(self, c:str):
-        return "'" + self.getErrorDisplayForChar(c) + "'"
+        pass
 
     # Lexers can normally match any char in it's vocabulary after matching
     #  a token, so do the easy thing and just kill a character and hope

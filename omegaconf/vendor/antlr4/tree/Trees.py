@@ -68,44 +68,24 @@ class Trees(object):
     #
     @classmethod
     def getAncestors(cls, t:Tree):
-        ancestors = []
-        t = t.getParent()
-        while t is not None:
-            ancestors.insert(0, t) # insert at start
-            t = t.getParent()
-        return ancestors
+        pass
 
     @classmethod
     def findAllTokenNodes(cls, t:ParseTree, ttype:int):
-        return cls.findAllNodes(t, ttype, True)
+        pass
 
     @classmethod
     def findAllRuleNodes(cls, t:ParseTree, ruleIndex:int):
-        return cls.findAllNodes(t, ruleIndex, False)
+        pass
 
     @classmethod
     def findAllNodes(cls, t:ParseTree, index:int, findTokens:bool):
-        nodes = []
-        cls._findAllNodes(t, index, findTokens, nodes)
-        return nodes
+        pass
 
     @classmethod
     def _findAllNodes(cls, t:ParseTree, index:int, findTokens:bool, nodes:list):
-        from ..ParserRuleContext import ParserRuleContext
-        # check this node (the root) first
-        if findTokens and isinstance(t, TerminalNode):
-            if t.symbol.type==index:
-                nodes.append(t)
-        elif not findTokens and isinstance(t, ParserRuleContext):
-            if t.ruleIndex == index:
-                nodes.append(t)
-        # check children
-        for i in range(0, t.getChildCount()):
-            cls._findAllNodes(t.getChild(i), index, findTokens, nodes)
+        pass
 
     @classmethod
     def descendants(cls, t:ParseTree):
-        nodes = [t]
-        for i in range(0, t.getChildCount()):
-            nodes.extend(cls.descendants(t.getChild(i)))
-        return nodes
+        pass

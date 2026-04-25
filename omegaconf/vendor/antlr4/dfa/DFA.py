@@ -95,25 +95,15 @@ class DFA(object):
     # {@code false}
 
     def setPrecedenceDfa(self, precedenceDfa:bool):
-        if self.precedenceDfa != precedenceDfa:
-            self._states = dict()
-            if precedenceDfa:
-                precedenceState = DFAState(configs=ATNConfigSet())
-                precedenceState.edges = []
-                precedenceState.isAcceptState = False
-                precedenceState.requiresFullContext = False
-                self.s0 = precedenceState
-            else:
-                self.s0 = None
-            self.precedenceDfa = precedenceDfa
+        pass
 
     @property
     def states(self):
-        return self._states
+        pass
 
     # Return a list of all states in this DFA, ordered by state number.
     def sortedStates(self):
-        return sorted(self._states.keys(), key=lambda state: state.stateNumber)
+        pass
 
     def __str__(self):
         return self.toString(None)

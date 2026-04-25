@@ -161,7 +161,7 @@ class Parser (Recognizer):
         return t
 
     def getParseListeners(self):
-        return list() if self._parseListeners is None else self._parseListeners
+        pass
 
     # Registers {@code listener} to receive events during the parsing process.
     #
@@ -213,7 +213,7 @@ class Parser (Recognizer):
 
     # Remove all parse listeners.
     def removeParseListeners(self):
-        self._parseListeners = None
+        pass
 
     # Notify any parse listeners of an enter rule event.
     def triggerEnterRuleEvent(self):
@@ -241,14 +241,14 @@ class Parser (Recognizer):
     # @see #notifyErrorListeners
     #
     def getNumberOfSyntaxErrors(self):
-        return self._syntaxErrors
+        pass
 
     def getTokenFactory(self):
         return self._input.tokenSource._factory
 
     # Tell our token source and error strategy about a new way to create tokens.#
     def setTokenFactory(self, factory:TokenFactory):
-        self._input.tokenSource._factory = factory
+        pass
 
     # The ATN with bypass alternatives is expensive to create so we create it
     # lazily.
@@ -257,16 +257,7 @@ class Parser (Recognizer):
     # implement the {@link #getSerializedATN()} method.
     #
     def getATNWithBypassAlts(self):
-        serializedAtn = self.getSerializedATN()
-        if serializedAtn is None:
-            raise UnsupportedOperationException("The current parser does not support an ATN with bypass alternatives.")
-        result = self.bypassAltsAtnCache.get(serializedAtn, None)
-        if result is None:
-            deserializationOptions = ATNDeserializationOptions()
-            deserializationOptions.generateRuleBypassTransitions = True
-            result = ATNDeserializer(deserializationOptions).deserialize(serializedAtn)
-            self.bypassAltsAtnCache[serializedAtn] = result
-        return result
+        pass
 
     # The preferred method of getting a tree pattern. For example, here's a
     # sample use:
@@ -279,32 +270,21 @@ class Parser (Recognizer):
     # </pre>
     #
     def compileParseTreePattern(self, pattern:str, patternRuleIndex:int, lexer:Lexer = None):
-        if lexer is None:
-            if self.getTokenStream() is not None:
-                tokenSource = self.getTokenStream().tokenSource
-                if isinstance( tokenSource, Lexer ):
-                    lexer = tokenSource
-        if lexer is None:
-            raise UnsupportedOperationException("Parser can't discover a lexer to use")
-
-        m = ParseTreePatternMatcher(lexer, self)
-        return m.compile(pattern, patternRuleIndex)
+        pass
 
 
     def getInputStream(self):
         return self.getTokenStream()
 
     def setInputStream(self, input:InputStream):
-        self.setTokenStream(input)
+        pass
 
     def getTokenStream(self):
         return self._input
 
     # Set the token stream and reset the parser.#
     def setTokenStream(self, input:TokenStream):
-        self._input = None
-        self.reset()
-        self._input = input
+        pass
 
     # Match needs to return the current input symbol, which gets put
     #  into the label for the associated token ref; e.g., x=ID.
@@ -386,14 +366,7 @@ class Parser (Recognizer):
         self._ctx = self._ctx.parentCtx
 
     def enterOuterAlt(self, localctx:ParserRuleContext, altNum:int):
-        localctx.setAltNumber(altNum)
-        # if we have new localctx, make sure we replace existing ctx
-        # that is previous child of parse tree
-        if self.buildParseTrees and self._ctx != localctx:
-            if self._ctx.parentCtx is not None:
-                self._ctx.parentCtx.removeLastChild()
-                self._ctx.parentCtx.addChild(localctx)
-        self._ctx = localctx
+        pass
 
     # Get the precedence level for the top-most precedence rule.
     #
@@ -451,12 +424,7 @@ class Parser (Recognizer):
             parentCtx.addChild(retCtx)
 
     def getInvokingContext(self, ruleIndex:int):
-        ctx = self._ctx
-        while ctx is not None:
-            if ctx.getRuleIndex() == ruleIndex:
-                return ctx
-            ctx = ctx.parentCtx
-        return None
+        pass
 
 
     def precpred(self, localctx:RuleContext , precedence:int):
@@ -464,7 +432,7 @@ class Parser (Recognizer):
 
     def inContext(self, context:str):
         # TODO: useful in parser?
-        return False
+        pass
 
     #
     # Checks whether or not {@code symbol} can follow the current state in the
@@ -481,27 +449,7 @@ class Parser (Recognizer):
     # the ATN, otherwise {@code false}.
     #
     def isExpectedToken(self, symbol:int):
-        atn = self._interp.atn
-        ctx = self._ctx
-        s = atn.states[self.state]
-        following = atn.nextTokens(s)
-        if symbol in following:
-            return True
-        if not Token.EPSILON in following:
-            return False
-
-        while ctx is not None and ctx.invokingState>=0 and Token.EPSILON in following:
-            invokingState = atn.states[ctx.invokingState]
-            rt = invokingState.transitions[0]
-            following = atn.nextTokens(rt.followState)
-            if symbol in following:
-                return True
-            ctx = ctx.parentCtx
-
-        if Token.EPSILON in following and symbol == Token.EOF:
-            return True
-        else:
-            return False
+        pass
 
     # Computes the set of input symbols which could follow the current parser
     # state and context, as given by {@link #getState} and {@link #getContext},
@@ -513,9 +461,7 @@ class Parser (Recognizer):
         return self._interp.atn.getExpectedTokens(self.state, self._ctx)
 
     def getExpectedTokensWithinCurrentRule(self):
-        atn = self._interp.atn
-        s = atn.states[self.state]
-        return atn.nextTokens(s)
+        pass
 
     # Get a rule's index (i.e., {@code RULE_ruleName} field) or -1 if not found.#
     def getRuleIndex(self, ruleName:str):
@@ -548,23 +494,15 @@ class Parser (Recognizer):
 
     # For debugging and other purposes.#
     def getDFAStrings(self):
-        return [ str(dfa) for dfa in self._interp.decisionToDFA]
+        pass
 
     # For debugging and other purposes.#
     def dumpDFA(self):
-        seenOne = False
-        for i in range(0, len(self._interp.decisionToDFA)):
-            dfa = self._interp.decisionToDFA[i]
-            if len(dfa.states)>0:
-                if seenOne:
-                    print(file=self._output)
-                print("Decision " + str(dfa.decision) + ":", file=self._output)
-                print(dfa.toString(self.literalNames, self.symbolicNames), end='', file=self._output)
-                seenOne = True
+        pass
 
 
     def getSourceName(self):
-        return self._input.sourceName
+        pass
 
     # During a parse is sometimes useful to listen in on the rule entry and exit
     #  events as well as token matches. self is for quick and dirty debugging.

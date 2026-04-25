@@ -113,25 +113,17 @@ class ParseTreePatternMatcher(object):
     # @exception IllegalArgumentException if {@code stop} is {@code null} or empty.
     #
     def setDelimiters(self, start:str, stop:str, escapeLeft:str):
-        if start is None or len(start)==0:
-            raise Exception("start cannot be null or empty")
-        if stop is None or len(stop)==0:
-            raise Exception("stop cannot be null or empty")
-        self.start = start
-        self.stop = stop
-        self.escape = escapeLeft
+        pass
 
     # Does {@code pattern} matched as rule {@code patternRuleIndex} match {@code tree}?#
     def matchesRuleIndex(self, tree:ParseTree, pattern:str, patternRuleIndex:int):
-        p = self.compileTreePattern(pattern, patternRuleIndex)
-        return self.matches(tree, p)
+        pass
 
     # Does {@code pattern} matched as rule patternRuleIndex match tree? Pass in a
     #  compiled pattern instead of a string representation of a tree pattern.
     #
     def matchesPattern(self, tree:ParseTree, pattern:ParseTreePattern):
-        mismatchedNode = self.matchImpl(tree, pattern.patternTree, dict())
-        return mismatchedNode is None
+        pass
 
     #
     # Compare {@code pattern} matched as rule {@code patternRuleIndex} against
@@ -139,8 +131,7 @@ class ParseTreePatternMatcher(object):
     # matched elements, or the node at which the match failed.
     #
     def matchRuleIndex(self, tree:ParseTree, pattern:str, patternRuleIndex:int):
-        p = self.compileTreePattern(pattern, patternRuleIndex)
-        return self.matchPattern(tree, p)
+        pass
 
     #
     # Compare {@code pattern} matched against {@code tree} and return a
@@ -149,39 +140,14 @@ class ParseTreePatternMatcher(object):
     # string representation of a tree pattern.
     #
     def matchPattern(self, tree:ParseTree, pattern:ParseTreePattern):
-        labels = dict()
-        mismatchedNode = self.matchImpl(tree, pattern.patternTree, labels)
-        from ..tree.ParseTreeMatch import ParseTreeMatch
-        return ParseTreeMatch(tree, pattern, labels, mismatchedNode)
+        pass
 
     #
     # For repeated use of a tree pattern, compile it to a
     # {@link ParseTreePattern} using this method.
     #
     def compileTreePattern(self, pattern:str, patternRuleIndex:int):
-        tokenList = self.tokenize(pattern)
-        tokenSrc = ListTokenSource(tokenList)
-        tokens = CommonTokenStream(tokenSrc)
-        from ..ParserInterpreter import ParserInterpreter
-        parserInterp = ParserInterpreter(self.parser.grammarFileName, self.parser.tokenNames,
-                                self.parser.ruleNames, self.parser.getATNWithBypassAlts(),tokens)
-        tree = None
-        try:
-            parserInterp.setErrorHandler(BailErrorStrategy())
-            tree = parserInterp.parse(patternRuleIndex)
-        except ParseCancellationException as e:
-            raise e.cause
-        except RecognitionException as e:
-            raise e
-        except Exception as e:
-            raise CannotInvokeStartRule(e)
-
-        # Make sure tree pattern compilation checks for a complete parse
-        if tokens.LA(1)!=Token.EOF:
-            raise StartRuleDoesNotConsumeFullPattern()
-
-        from ..tree.ParseTreePattern import ParseTreePattern
-        return ParseTreePattern(self, pattern, patternRuleIndex, tree)
+        pass
 
     #
     # Recursively walk {@code tree} against {@code patternTree}, filling
@@ -193,114 +159,18 @@ class ParseTreePatternMatcher(object):
     # algorithm used by the implementation, and may be overridden.
     #
     def matchImpl(self, tree:ParseTree, patternTree:ParseTree, labels:dict):
-        if tree is None:
-            raise Exception("tree cannot be null")
-        if patternTree is None:
-            raise Exception("patternTree cannot be null")
-
-        # x and <ID>, x and y, or x and x; or could be mismatched types
-        if isinstance(tree, TerminalNode) and isinstance(patternTree, TerminalNode ):
-            mismatchedNode = None
-            # both are tokens and they have same type
-            if tree.symbol.type == patternTree.symbol.type:
-                if isinstance( patternTree.symbol, TokenTagToken ): # x and <ID>
-                    tokenTagToken = patternTree.symbol
-                    # track label->list-of-nodes for both token name and label (if any)
-                    self.map(labels, tokenTagToken.tokenName, tree)
-                    if tokenTagToken.label is not None:
-                        self.map(labels, tokenTagToken.label, tree)
-                elif tree.getText()==patternTree.getText():
-                    # x and x
-                    pass
-                else:
-                    # x and y
-                    if mismatchedNode is None:
-                        mismatchedNode = tree
-            else:
-                if mismatchedNode is None:
-                    mismatchedNode = tree
-
-            return mismatchedNode
-
-        if isinstance(tree, ParserRuleContext) and isinstance(patternTree, ParserRuleContext):
-            mismatchedNode = None
-            # (expr ...) and <expr>
-            ruleTagToken = self.getRuleTagToken(patternTree)
-            if ruleTagToken is not None:
-                m = None
-                if tree.ruleContext.ruleIndex == patternTree.ruleContext.ruleIndex:
-                    # track label->list-of-nodes for both rule name and label (if any)
-                    self.map(labels, ruleTagToken.ruleName, tree)
-                    if ruleTagToken.label is not None:
-                        self.map(labels, ruleTagToken.label, tree)
-                else:
-                    if mismatchedNode is None:
-                        mismatchedNode = tree
-
-                return mismatchedNode
-
-            # (expr ...) and (expr ...)
-            if tree.getChildCount()!=patternTree.getChildCount():
-                if mismatchedNode is None:
-                    mismatchedNode = tree
-                return mismatchedNode
-
-            n = tree.getChildCount()
-            for i in range(0, n):
-                childMatch = self.matchImpl(tree.getChild(i), patternTree.getChild(i), labels)
-                if childMatch is not None:
-                    return childMatch
-
-            return mismatchedNode
-
-        # if nodes aren't both tokens or both rule nodes, can't match
-        return tree
+        pass
 
     def map(self, labels, label, tree):
-        v = labels.get(label, None)
-        if v is None:
-            v = list()
-            labels[label] = v
-        v.append(tree)
+        pass
 
     # Is {@code t} {@code (expr <expr>)} subtree?#
     def getRuleTagToken(self, tree:ParseTree):
-        if isinstance( tree, RuleNode ):
-            if tree.getChildCount()==1 and isinstance(tree.getChild(0), TerminalNode ):
-                c = tree.getChild(0)
-                if isinstance( c.symbol, RuleTagToken ):
-                    return c.symbol
-        return None
+        pass
 
     def tokenize(self, pattern:str):
         # split pattern into chunks: sea (raw input) and islands (<ID>, <expr>)
-        chunks = self.split(pattern)
-
-        # create token stream from text and tags
-        tokens = list()
-        for chunk in chunks:
-            if isinstance( chunk, TagChunk ):
-                # add special rule token or conjure up new token from name
-                if chunk.tag[0].isupper():
-                    ttype = self.parser.getTokenType(chunk.tag)
-                    if ttype==Token.INVALID_TYPE:
-                        raise Exception("Unknown token " + str(chunk.tag) + " in pattern: " + pattern)
-                    tokens.append(TokenTagToken(chunk.tag, ttype, chunk.label))
-                elif chunk.tag[0].islower():
-                    ruleIndex = self.parser.getRuleIndex(chunk.tag)
-                    if ruleIndex==-1:
-                        raise Exception("Unknown rule " + str(chunk.tag) + " in pattern: " + pattern)
-                    ruleImaginaryTokenType = self.parser.getATNWithBypassAlts().ruleToTokenType[ruleIndex]
-                    tokens.append(RuleTagToken(chunk.tag, ruleImaginaryTokenType, chunk.label))
-                else:
-                    raise Exception("invalid tag: " + str(chunk.tag) + " in pattern: " + pattern)
-            else:
-                self.lexer.setInputStream(InputStream(chunk.text))
-                t = self.lexer.nextToken()
-                while t.type!=Token.EOF:
-                    tokens.append(t)
-                    t = self.lexer.nextToken()
-        return tokens
+        pass
 
     # Split {@code <ID> = <e:expr> ;} into 4 chunks for tokenizing by {@link #tokenize}.#
     def split(self, pattern:str):

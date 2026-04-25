@@ -35,22 +35,7 @@ class LL1Analyzer (object):
     # @return the expected symbols for each outgoing transition of {@code s}.
     #/
     def getDecisionLookahead(self, s:ATNState):
-        if s is None:
-            return None
-
-        count = len(s.transitions)
-        look = [] * count
-        for alt in range(0, count):
-            look[alt] = set()
-            lookBusy = set()
-            seeThruPreds = False # fail to get lookahead upon pred
-            self._LOOK(s.transition(alt).target, None, PredictionContext.EMPTY,
-                  look[alt], lookBusy, set(), seeThruPreds, False)
-            # Wipe out lookahead for this alternative if we found nothing
-            # or we had a predicate when we !seeThruPreds
-            if len(look[alt])==0 or self.HIT_PRED in look[alt]:
-                look[alt] = None
-        return look
+        pass
 
     #*
     # Compute set of tokens that can follow {@code s} in the ATN in the

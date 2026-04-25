@@ -62,20 +62,7 @@ class ParserRuleContext(RuleContext):
     #/
     def copyFrom(self, ctx:ParserRuleContext):
         # from RuleContext
-        self.parentCtx = ctx.parentCtx
-        self.invokingState = ctx.invokingState
-        self.children = None
-        self.start = ctx.start
-        self.stop = ctx.stop
-
-        # copy any error nodes to alt label node
-        if ctx.children is not None:
-            self.children = []
-            # reset parent pointer for any error nodes
-            for child in ctx.children:
-                if isinstance(child, ErrorNodeImpl):
-                    self.children.append(child)
-                    child.parentCtx = self
+        pass
 
     # Double dispatch methods for listeners
     def enterRule(self, listener:ParseTreeListener):
@@ -96,8 +83,7 @@ class ParserRuleContext(RuleContext):
     #  generic ruleContext object.
     #/
     def removeLastChild(self):
-        if self.children is not None:
-            del self.children[len(self.children)-1]
+        pass
 
     def addTokenNode(self, token:Token):
         node = TerminalNodeImpl(token)
@@ -131,50 +117,22 @@ class ParserRuleContext(RuleContext):
                 yield child
 
     def getToken(self, ttype:int, i:int):
-        for child in self.getChildren():
-            if not isinstance(child, TerminalNode):
-                continue
-            if child.symbol.type != ttype:
-                continue
-            if i==0:
-                return child
-            i -= 1
-        return None
+        pass
 
     def getTokens(self, ttype:int ):
-        if self.getChildren() is None:
-            return []
-        tokens = []
-        for child in self.getChildren():
-            if not isinstance(child, TerminalNode):
-                continue
-            if child.symbol.type != ttype:
-                continue
-            tokens.append(child)
-        return tokens
+        pass
 
     def getTypedRuleContext(self, ctxType:type, i:int):
-        return self.getChild(i, ctxType)
+        pass
 
     def getTypedRuleContexts(self, ctxType:type):
-        children = self.getChildren()
-        if children is None:
-            return []
-        contexts = []
-        for child in children:
-            if not isinstance(child, ctxType):
-                continue
-            contexts.append(child)
-        return contexts
+        pass
 
     def getChildCount(self):
         return len(self.children) if self.children else 0
 
     def getSourceInterval(self):
-        if self.start is None or self.stop is None:
-            return INVALID_INTERVAL
-        else:
-            return (self.start.tokenIndex, self.stop.tokenIndex)
+        pass
 
 
 RuleContext.EMPTY = ParserRuleContext()

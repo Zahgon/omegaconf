@@ -79,7 +79,7 @@ class ATN(object):
         self.states.append(state)
 
     def removeState(self, state:ATNState):
-        self.states[state.stateNumber] = None # just free mem, don't shift states in list
+        pass
 
     def defineDecisionState(self, s:DecisionState):
         self.decisionToState.append(s)

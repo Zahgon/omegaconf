@@ -219,24 +219,11 @@ class OmegaConf:
         :param f: filename or file object
         :param resolve: True to save a resolved config (defaults to False)
         """
-        if is_dataclass(config) or is_attr_class(config):
-            config = OmegaConf.create(config)
-        data = OmegaConf.to_yaml(config, resolve=resolve)
-        if isinstance(f, (str, pathlib.Path)):
-            with io.open(os.path.abspath(f), "w", encoding="utf-8") as file:
-                file.write(data)
-        elif hasattr(f, "write"):
-            f.write(data)
-            f.flush()
-        else:
-            raise TypeError("Unexpected file type")
+        pass
 
     @staticmethod
     def from_cli(args_list: Optional[List[str]] = None) -> DictConfig:
-        if args_list is None:
-            # Skip program name
-            args_list = sys.argv[1:]
-        return OmegaConf.from_dotlist(args_list)
+        pass
 
     @staticmethod
     def from_dotlist(dotlist: List[str]) -> DictConfig:
@@ -246,9 +233,7 @@ class OmegaConf:
         :param dotlist: A list of dotlist-style strings, e.g. ``["foo.bar=1", "baz=qux"]``.
         :return: A ``DictConfig`` object created from the dotlist.
         """
-        conf = OmegaConf.create()
-        conf.merge_with_dotlist(dotlist)
-        return conf
+        pass
 
     @staticmethod
     def merge(
@@ -315,78 +300,16 @@ class OmegaConf:
             hint: use `from omegaconf import ListMergeMode` to access the merge mode
         :return: the merged config object.
         """
-        assert len(configs) > 0
-        target = configs[0]
-        target = _ensure_container(target)
-        assert isinstance(target, (DictConfig, ListConfig))
-
-        with flag_override(
-            target, ["readonly", "no_deepcopy_set_nodes"], [False, True]
-        ):
-            target.merge_with(
-                *configs[1:],
-                list_merge_mode=list_merge_mode,
-            )
-            turned_readonly = target._get_flag("readonly") is True
-
-        if turned_readonly:
-            OmegaConf.set_readonly(target, True)
-
-        return target
+        pass
 
     @staticmethod
     def register_resolver(name: str, resolver: Resolver) -> None:
-        warnings.warn(
-            dedent("""\
-            register_resolver() is deprecated.
-            See https://github.com/omry/omegaconf/issues/426 for migration instructions.
-            """),
-            stacklevel=2,
-        )
-        return OmegaConf.legacy_register_resolver(name, resolver)
+        pass
 
     # This function will eventually be deprecated and removed.
     @staticmethod
     def legacy_register_resolver(name: str, resolver: Resolver) -> None:
-        assert callable(resolver), "resolver must be callable"
-        # noinspection PyProtectedMember
-        assert (
-            name not in BaseContainer._resolvers
-        ), f"resolver '{name}' is already registered"
-
-        def resolver_wrapper(
-            config: BaseContainer,
-            parent: BaseContainer,
-            node: Node,
-            args: Tuple[Any, ...],
-            args_str: Tuple[str, ...],
-        ) -> Any:
-            cache = OmegaConf.get_cache(config)[name]
-            # "Un-escape " spaces and commas.
-            args_unesc = [x.replace(r"\ ", " ").replace(r"\,", ",") for x in args_str]
-
-            # Nested interpolations behave in a potentially surprising way with
-            # legacy resolvers (they remain as strings, e.g., "${foo}"). If any
-            # input looks like an interpolation we thus raise an exception.
-            try:
-                bad_arg = next(i for i in args_unesc if "${" in i)
-            except StopIteration:
-                pass
-            else:
-                raise ValueError(
-                    f"Resolver '{name}' was called with argument '{bad_arg}' that appears "
-                    f"to be an interpolation. Nested interpolations are not supported for "
-                    f"resolvers registered with `[legacy_]register_resolver()`, please use "
-                    f"`register_new_resolver()` instead (see "
-                    f"https://github.com/omry/omegaconf/issues/426 for migration instructions)."  # noqa: E231
-                )
-            key = args_str
-            val = cache[key] if key in cache else resolver(*args_unesc)
-            cache[key] = val
-            return val
-
-        # noinspection PyProtectedMember
-        BaseContainer._resolvers[name] = resolver_wrapper
+        pass
 
     @staticmethod
     def register_new_resolver(
@@ -445,26 +368,7 @@ class OmegaConf:
             args: Tuple[Any, ...],
             args_str: Tuple[str, ...],
         ) -> Any:
-            if use_cache:
-                cache = OmegaConf.get_cache(config)[name]
-                try:
-                    return cache[args_str]
-                except KeyError:
-                    ret = resolver(*args)
-                    cache[args_str] = ret
-                    return ret
-
-            # Call resolver.
-            kwargs: Dict[str, Node] = {}
-            if pass_parent:
-                kwargs["_parent_"] = parent
-            if pass_node:
-                kwargs["_node_"] = node
-            if pass_root:
-                kwargs["_root_"] = config
-
-            ret = resolver(*args, **kwargs)
-            return ret
+            pass
 
         # noinspection PyProtectedMember
         BaseContainer._resolvers[name] = resolver_wrapper
@@ -479,8 +383,7 @@ class OmegaConf:
         """
         Clear(remove) all OmegaConf resolvers, then re-register OmegaConf's default resolvers.
         """
-        BaseContainer._resolvers = {}
-        register_default_resolvers()
+        pass
 
     @classmethod
     def clear_resolver(cls, name: str) -> bool:
@@ -495,12 +398,7 @@ class OmegaConf:
         :param name: Name of the resolver.
         :return: A bool (``True`` if resolver is removed, ``False`` if not found before removing).
         """
-        if cls.has_resolver(name):
-            BaseContainer._resolvers.pop(name)
-            return True
-        else:
-            # return False if resolver does not exist
-            return False
+        pass
 
     @staticmethod
     def get_cache(conf: BaseContainer) -> Dict[str, Any]:
@@ -508,15 +406,15 @@ class OmegaConf:
 
     @staticmethod
     def set_cache(conf: BaseContainer, cache: Dict[str, Any]) -> None:
-        conf._metadata.resolver_cache = copy.deepcopy(cache)
+        pass
 
     @staticmethod
     def clear_cache(conf: BaseContainer) -> None:
-        OmegaConf.set_cache(conf, defaultdict(dict, {}))
+        pass
 
     @staticmethod
     def copy_cache(from_config: BaseContainer, to_config: BaseContainer) -> None:
-        OmegaConf.set_cache(to_config, OmegaConf.get_cache(from_config))
+        pass
 
     @staticmethod
     def set_readonly(conf: Node, value: Optional[bool]) -> None:
@@ -526,7 +424,7 @@ class OmegaConf:
     @staticmethod
     def is_readonly(conf: Node) -> Optional[bool]:
         # noinspection PyProtectedMember
-        return conf._get_flag("readonly")
+        pass
 
     @staticmethod
     def set_struct(conf: Container, value: Optional[bool]) -> None:
@@ -536,7 +434,7 @@ class OmegaConf:
     @staticmethod
     def is_struct(conf: Container) -> Optional[bool]:
         # noinspection PyProtectedMember
-        return conf._get_flag("struct")
+        pass
 
     @staticmethod
     def masked_copy(conf: DictConfig, keys: Union[str, List[str]]) -> DictConfig:
@@ -547,15 +445,7 @@ class OmegaConf:
         :param keys: keys to preserve in the copy
         :return: The masked ``DictConfig`` object.
         """
-        from .dictconfig import DictConfig
-
-        if not isinstance(conf, DictConfig):
-            raise ValueError("masked_copy is only supported for DictConfig")
-
-        if isinstance(keys, str):
-            keys = [keys]
-        content = {key: value for key, value in conf.items_ex(resolve=False, keys=keys)}
-        return DictConfig(content=content)
+        pass
 
     @staticmethod
     def to_container(
@@ -619,27 +509,11 @@ class OmegaConf:
 
     @staticmethod
     def is_missing(cfg: Any, key: DictKeyType) -> bool:
-        assert isinstance(cfg, Container)
-        try:
-            node = cfg._get_child(key)
-            if node is None:
-                return False
-            assert isinstance(node, Node)
-            return node._is_missing()
-        except (UnsupportedInterpolationType, KeyError, AttributeError):
-            return False
+        pass
 
     @staticmethod
     def is_interpolation(node: Any, key: Optional[Union[int, str]] = None) -> bool:
-        if key is not None:
-            assert isinstance(node, Container)
-            target = node._get_child(key)
-        else:
-            target = node
-        if target is not None:
-            assert isinstance(target, Node)
-            return target._is_interpolation()
-        return False
+        pass
 
     @staticmethod
     def is_list(obj: Any) -> bool:
@@ -686,18 +560,7 @@ class OmegaConf:
                is made, otherwise return None
         :return: selected value or None if not found.
         """
-        from ._impl import select_value
-
-        try:
-            return select_value(
-                cfg=cfg,
-                key=key,
-                default=default,
-                throw_on_resolution_failure=throw_on_resolution_failure,
-                throw_on_missing=throw_on_missing,
-            )
-        except Exception as e:
-            format_and_raise(node=cfg, key=key, value=None, cause=e, msg=str(e))
+        pass
 
     @staticmethod
     def update(
@@ -774,15 +637,7 @@ class OmegaConf:
         :param sort_keys: If True, will print dict keys in sorted order. default False.
         :return: A string containing the yaml representation.
         """
-        cfg = _ensure_container(cfg)
-        container = OmegaConf.to_container(cfg, resolve=resolve, enum_to_str=True)
-        return yaml.dump(  # type: ignore
-            container,
-            default_flow_style=False,
-            allow_unicode=True,
-            sort_keys=sort_keys,
-            Dumper=get_omega_conf_dumper(),
-        )
+        pass
 
     @staticmethod
     def resolve(cfg: Container) -> None:
@@ -812,24 +667,7 @@ class OmegaConf:
         :return: set of strings of the missing keys.
         :raises ValueError: On input not representing a config.
         """
-        cfg = _ensure_container(cfg)
-        missings: Set[str] = set()
-
-        def gather(_cfg: Container) -> None:
-            itr: Iterable[Any]
-            if isinstance(_cfg, ListConfig):
-                itr = range(len(_cfg))
-            else:
-                itr = _cfg
-
-            for key in itr:
-                if OmegaConf.is_missing(_cfg, key):
-                    missings.add(_cfg._get_full_key(key))
-                elif OmegaConf.is_config(_cfg[key]):
-                    gather(_cfg[key])
-
-        gather(cfg)
-        return missings
+        pass
 
     # === private === #
 
@@ -990,12 +828,7 @@ def flag_override(
 
 @contextmanager
 def read_write(config: Node) -> Generator[Node, None, None]:
-    prev_state = config._get_node_flag("readonly")
-    try:
-        OmegaConf.set_readonly(config, False)
-        yield config
-    finally:
-        OmegaConf.set_readonly(config, prev_state)
+    pass
 
 
 @contextmanager

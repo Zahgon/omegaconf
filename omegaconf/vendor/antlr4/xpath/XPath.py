@@ -157,8 +157,7 @@ class XPath(object):
 
     @staticmethod
     def findAll(tree:ParseTree, xpath:str, parser:Parser):
-        p = XPath(parser, xpath)
-        return p.evaluate(tree)
+        pass
 
     #
     # Return a list of all nodes starting at {@code t} as root that satisfy the
@@ -166,27 +165,7 @@ class XPath(object):
     # {@link #evaluate}.
     #
     def evaluate(self, t:ParseTree):
-        dummyRoot = ParserRuleContext()
-        dummyRoot.children = [t] # don't set t's parent.
-
-        work = [dummyRoot]
-        for element in self.elements:
-            work_next = list()
-            for node in work:
-                if not isinstance(node, TerminalNode) and node.children:
-                    # only try to match next element if it has children
-                    # e.g., //func/*/stat might have a token node for which
-                    # we can't go looking for stat nodes.
-                    matching = element.evaluate(node)
-
-                    # See issue antlr#370 - Prevents XPath from returning the
-                    # same node multiple times
-                    matching = filter(lambda m: m not in work_next, matching)
-
-                    work_next.extend(matching)
-            work = work_next
-
-        return work
+        pass
 
 
 class XPathElement(object):
@@ -211,7 +190,7 @@ class XPathRuleAnywhereElement(XPathElement):
 
     def evaluate(self, t:ParseTree):
         # return all ParserRuleContext descendants of t that match ruleIndex (or do not match if inverted)
-        return filter(lambda c: isinstance(c, ParserRuleContext) and (self.invert ^ (c.getRuleIndex() == self.ruleIndex)), Trees.descendants(t))
+        pass
 
 class XPathRuleElement(XPathElement):
 
@@ -221,7 +200,7 @@ class XPathRuleElement(XPathElement):
 
     def evaluate(self, t:ParseTree):
         # return all ParserRuleContext children of t that match ruleIndex (or do not match if inverted)
-        return filter(lambda c: isinstance(c, ParserRuleContext) and (self.invert ^ (c.getRuleIndex() == self.ruleIndex)), Trees.getChildren(t))
+        pass
 
 class XPathTokenAnywhereElement(XPathElement):
 
@@ -231,7 +210,7 @@ class XPathTokenAnywhereElement(XPathElement):
 
     def evaluate(self, t:ParseTree):
         # return all TerminalNode descendants of t that match tokenType (or do not match if inverted)
-        return filter(lambda c: isinstance(c, TerminalNode) and (self.invert ^ (c.symbol.type == self.tokenType)), Trees.descendants(t))
+        pass
 
 class XPathTokenElement(XPathElement):
 
@@ -241,7 +220,7 @@ class XPathTokenElement(XPathElement):
 
     def evaluate(self, t:ParseTree):
         # return all TerminalNode children of t that match tokenType (or do not match if inverted)
-        return filter(lambda c: isinstance(c, TerminalNode) and (self.invert ^ (c.symbol.type == self.tokenType)), Trees.getChildren(t))
+        pass
 
 
 class XPathWildcardAnywhereElement(XPathElement):
@@ -250,10 +229,7 @@ class XPathWildcardAnywhereElement(XPathElement):
         super().__init__(XPath.WILDCARD)
 
     def evaluate(self, t:ParseTree):
-        if self.invert:
-            return list() # !* is weird but valid (empty)
-        else:
-            return Trees.descendants(t)
+        pass
 
 
 class XPathWildcardElement(XPathElement):
@@ -263,7 +239,4 @@ class XPathWildcardElement(XPathElement):
 
 
     def evaluate(self, t:ParseTree):
-        if self.invert:
-            return list() # !* is weird but valid (empty)
-        else:
-            return Trees.getChildren(t)
+        pass

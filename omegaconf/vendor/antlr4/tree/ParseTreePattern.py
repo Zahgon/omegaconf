@@ -63,10 +63,4 @@ class ParseTreePattern(object):
     # regardless of the reason for the failure.
     #
     def findAll(self, tree:ParseTree, xpath:str):
-        subtrees = XPath.findAll(tree, xpath, self.matcher.parser)
-        matches = list()
-        for t in subtrees:
-            match = self.match(t)
-            if match.succeeded():
-                matches.append(match)
-        return matches
+        pass

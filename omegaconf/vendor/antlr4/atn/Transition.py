@@ -77,9 +77,7 @@ class AtomTransition(Transition):
         self.serializationType = self.ATOM
 
     def makeLabel(self):
-        s = IntervalSet()
-        s.addOne(self.label_)
-        return s
+        pass
 
     def matches( self, symbol:int, minVocabSymbol:int,  maxVocabSymbol:int):
         return self.label_ == symbol
@@ -128,9 +126,7 @@ class RangeTransition(Transition):
         self.label = self.makeLabel()
 
     def makeLabel(self):
-        s = IntervalSet()
-        s.addRange(range(self.start, self.stop + 1))
-        return s
+        pass
 
     def matches( self, symbol:int, minVocabSymbol:int,  maxVocabSymbol:int):
         return symbol >= self.start and symbol <= self.stop

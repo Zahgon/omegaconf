@@ -47,12 +47,7 @@ class RuleContext(RuleNode):
 
 
     def depth(self):
-        n = 0
-        p = self
-        while p is not None:
-            p = p.parentCtx
-            n += 1
-        return n
+        pass
 
     # A context is empty if there is no invoking state; meaning nobody call
     #  current context.
@@ -62,7 +57,7 @@ class RuleContext(RuleNode):
     # satisfy the ParseTree / SyntaxTree interface
 
     def getSourceInterval(self):
-        return INVALID_INTERVAL
+        pass
 
     def getRuleContext(self):
         return self

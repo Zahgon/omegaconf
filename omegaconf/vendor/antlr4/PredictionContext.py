@@ -69,13 +69,10 @@ class PredictionContext(object):
         return self.cachedHashCode
 
 def calculateHashCode(parent:PredictionContext, returnState:int):
-    return hash("") if parent is None else hash((hash(parent), returnState))
+    pass
 
 def calculateListsHashCode(parents:[], returnStates:[] ):
-    h = 0
-    for parent, returnState in zip(parents, returnStates):
-        h = hash((h, calculateHashCode(parent, returnState)))
-    return h
+    pass
 
 #  Used to cache {@link PredictionContext} objects. Its used for the shared
 #  context cash associated with contexts in DFA states. This cache
@@ -606,18 +603,5 @@ def getCachedPredictionContext(context:PredictionContext, contextCache:Predictio
 
 # ter's recursive version of Sam's getAllNodes()
 def getAllContextNodes(context:PredictionContext, nodes:list=None, visited:dict=None):
-    if nodes is None:
-        nodes = list()
-        return getAllContextNodes(context, nodes, visited)
-    elif visited is None:
-        visited = dict()
-        return getAllContextNodes(context, nodes, visited)
-    else:
-        if context is None or visited.get(context, None) is not None:
-            return nodes
-        visited.put(context, context)
-        nodes.add(context)
-        for i in range(0, len(context)):
-            getAllContextNodes(context.getParent(i), nodes, visited)
-        return nodes
+    pass
 

@@ -1511,17 +1511,7 @@ class ParserATNSimulator(ATNSimulator):
     #  "dead" code for a bit.
     #
     def dumpDeadEndConfigs(self, nvae:NoViableAltException):
-        print("dead end configs: ")
-        for c in nvae.getDeadEndConfigs():
-            trans = "no edges"
-            if len(c.state.transitions)>0:
-                t = c.state.transitions[0]
-                if isinstance(t, AtomTransition):
-                    trans = "Atom "+ self.getTokenName(t.label)
-                elif isinstance(t, SetTransition):
-                    neg = isinstance(t, NotSetTransition)
-                    trans = ("~" if neg else "")+"Set "+ str(t.set)
-            print(c.toString(self.parser, True) + ":" + trans, file=sys.stderr)
+        pass
 
     def noViableAlt(self, input:TokenStream, outerContext:ParserRuleContext, configs:ATNConfigSet, startIndex:int):
         return NoViableAltException(self.parser, input, input.get(startIndex), input.LT(1), configs, outerContext)

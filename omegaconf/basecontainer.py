@@ -179,36 +179,14 @@ class BaseContainer(Container, ABC):
         return len(content)
 
     def merge_with_cli(self) -> None:
-        args_list = sys.argv[1:]
-        self.merge_with_dotlist(args_list)
+        pass
 
     def merge_with_dotlist(self, dotlist: List[str]) -> None:
-        from omegaconf import OmegaConf
-
-        def fail() -> None:
-            raise ValueError("Input list must be a list or a tuple of strings")
-
-        if not isinstance(dotlist, (list, tuple)):
-            fail()
-
-        for arg in dotlist:
-            if not isinstance(arg, str):
-                fail()
-
-            idx = arg.find("=")
-            if idx == -1:
-                key = arg
-                value = None
-            else:
-                key = arg[0:idx]
-                value = arg[idx + 1 :]
-                value = yaml.load(value, Loader=get_yaml_loader())
-
-            OmegaConf.update(self, key, value)
+        pass
 
     def is_empty(self) -> bool:
         """return true if config is empty"""
-        return len(self.__dict__["_content"]) == 0
+        pass
 
     @staticmethod
     def _to_content(
@@ -698,52 +676,7 @@ class BaseContainer(Container, ABC):
         c2: Container,
         k2: Union[DictKeyType, int],
     ) -> bool:
-        v1 = c1._get_child(k1)
-        v2 = c2._get_child(k2)
-        assert v1 is not None and v2 is not None
-
-        assert isinstance(v1, Node)
-        assert isinstance(v2, Node)
-
-        if v1._is_none() and v2._is_none():
-            return True
-
-        if v1._is_missing() and v2._is_missing():
-            return True
-
-        v1_inter = v1._is_interpolation()
-        v2_inter = v2._is_interpolation()
-        dv1: Optional[Node] = v1
-        dv2: Optional[Node] = v2
-
-        if v1_inter:
-            dv1 = v1._maybe_dereference_node()
-        if v2_inter:
-            dv2 = v2._maybe_dereference_node()
-
-        if v1_inter and v2_inter:
-            if dv1 is None or dv2 is None:
-                return v1 == v2
-            else:
-                # both are not none, if both are containers compare as container
-                if isinstance(dv1, Container) and isinstance(dv2, Container):
-                    if dv1 != dv2:
-                        return False
-                dv1 = _get_value(dv1)
-                dv2 = _get_value(dv2)
-                return dv1 == dv2
-        elif not v1_inter and not v2_inter:
-            v1 = _get_value(v1)
-            v2 = _get_value(v2)
-            ret = v1 == v2
-            assert isinstance(ret, bool)
-            return ret
-        else:
-            dv1 = _get_value(dv1)
-            dv2 = _get_value(dv2)
-            ret = dv1 == dv2
-            assert isinstance(ret, bool)
-            return ret
+        pass
 
     def _is_optional(self) -> bool:
         return self.__dict__["_metadata"].optional is True

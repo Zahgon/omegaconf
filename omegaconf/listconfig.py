@@ -398,11 +398,7 @@ class ListConfig(BaseContainer, MutableSequence[Any]):
             assert False
 
     def count(self, x: Any) -> int:
-        c = 0
-        for item in self:
-            if item == x:
-                c = c + 1
-        return c
+        pass
 
     def _get_node(
         self,
@@ -500,12 +496,12 @@ class ListConfig(BaseContainer, MutableSequence[Any]):
             if key is None:
 
                 def key1(x: Any) -> Any:
-                    return x._value()
+                    pass
 
             else:
 
                 def key1(x: Any) -> Any:
-                    return key(x._value())
+                    pass
 
             assert isinstance(self.__dict__["_content"], list)
             self.__dict__["_content"].sort(key=key1, reverse=reverse)
@@ -665,19 +661,4 @@ class ListConfig(BaseContainer, MutableSequence[Any]):
 
     @staticmethod
     def _list_eq(l1: Optional["ListConfig"], l2: Optional["ListConfig"]) -> bool:
-        l1_none = l1.__dict__["_content"] is None
-        l2_none = l2.__dict__["_content"] is None
-        if l1_none and l2_none:
-            return True
-        if l1_none != l2_none:
-            return False
-
-        assert isinstance(l1, ListConfig)
-        assert isinstance(l2, ListConfig)
-        if len(l1) != len(l2):
-            return False
-        for i in range(len(l1)):
-            if not BaseContainer._item_eq(l1, i, l2, i):
-                return False
-
-        return True
+        pass

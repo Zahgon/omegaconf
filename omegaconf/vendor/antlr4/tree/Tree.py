@@ -92,7 +92,7 @@ class TerminalNodeImpl(TerminalNode):
         return None
 
     def getSymbol(self):
-        return self.symbol
+        pass
 
     def getParent(self):
         return self.parentCtx
@@ -101,10 +101,7 @@ class TerminalNodeImpl(TerminalNode):
         return self.symbol
 
     def getSourceInterval(self):
-        if self.symbol is None:
-            return INVALID_INTERVAL
-        tokenIndex = self.symbol.tokenIndex
-        return (tokenIndex, tokenIndex)
+        pass
 
     def getChildCount(self):
         return 0
@@ -149,16 +146,7 @@ class ParseTreeWalker(object):
 	    @param listener The listener used by the walker to process grammar rules
 	    @param t The parse tree to be walked on
         """
-        if isinstance(t, ErrorNode):
-            listener.visitErrorNode(t)
-            return
-        elif isinstance(t, TerminalNode):
-            listener.visitTerminal(t)
-            return
-        self.enterRule(listener, t)
-        for child in t.getChildren():
-            self.walk(listener, child)
-        self.exitRule(listener, t)
+        pass
 
     #
     # The discovery of a rule node, involves sending two events: the generic

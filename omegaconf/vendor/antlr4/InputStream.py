@@ -20,9 +20,7 @@ class InputStream (object):
         self._loadString()
 
     def _loadString(self):
-        self._index = 0
-        self.data = [ord(c) for c in self.strdata]
-        self._size = len(self.data)
+        pass
 
     @property
     def index(self):
@@ -30,7 +28,7 @@ class InputStream (object):
 
     @property
     def size(self):
-        return self._size
+        pass
 
     # Reset the stream so that it's in the same state it was
     #  when the object was created *except* the data array is not

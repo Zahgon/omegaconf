@@ -44,25 +44,10 @@ class DFASerializer(object):
                 return output
 
     def getEdgeLabel(self, i:int):
-        if i==0:
-            return "EOF"
-        if self.literalNames is not None and i<=len(self.literalNames):
-            return self.literalNames[i-1]
-        elif self.symbolicNames is not None and i<=len(self.symbolicNames):
-            return self.symbolicNames[i-1]
-        else:
-            return str(i-1)
+        pass
 
     def getStateString(self, s:DFAState):
-        n = s.stateNumber
-        baseStateStr = ( ":" if s.isAcceptState else "") + "s" + str(n) + ( "^" if s.requiresFullContext else "")
-        if s.isAcceptState:
-            if s.predicates is not None:
-                return baseStateStr + "=>" + str_list(s.predicates)
-            else:
-                return baseStateStr + "=>" + str(s.prediction)
-        else:
-            return baseStateStr
+        pass
 
 class LexerDFASerializer(DFASerializer):
 
@@ -70,4 +55,4 @@ class LexerDFASerializer(DFASerializer):
         super().__init__(dfa, None)
 
     def getEdgeLabel(self, i:int):
-        return "'" + chr(i) + "'"
+        pass

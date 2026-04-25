@@ -132,19 +132,7 @@ class BufferedTokenStream(TokenStream):
 
     # Get all tokens from start..stop inclusively#/
     def getTokens(self, start:int, stop:int, types:set=None):
-        if start<0 or stop<0:
-            return None
-        self.lazyInit()
-        subset = []
-        if stop >= len(self.tokens):
-            stop = len(self.tokens)-1
-        for i in range(start, stop):
-            t = self.tokens[i]
-            if t.type==Token.EOF:
-                break
-            if types is None or t.type in types:
-                subset.append(t)
-        return subset
+        pass
 
     def LA(self, i:int):
         return self.LT(i).type
@@ -227,50 +215,21 @@ class BufferedTokenStream(TokenStream):
     #  the current token up until we see a token on DEFAULT_TOKEN_CHANNEL or
     #  EOF. If channel is -1, find any non default channel token.
     def getHiddenTokensToRight(self, tokenIndex:int, channel:int=-1):
-        self.lazyInit()
-        if tokenIndex<0 or tokenIndex>=len(self.tokens):
-            raise Exception(str(tokenIndex) + " not in 0.." + str(len(self.tokens)-1))
-        from .Lexer import Lexer
-        nextOnChannel = self.nextTokenOnChannel(tokenIndex + 1, Lexer.DEFAULT_TOKEN_CHANNEL)
-        from_ = tokenIndex+1
-        # if none onchannel to right, nextOnChannel=-1 so set to = last token
-        to = (len(self.tokens)-1) if nextOnChannel==-1 else nextOnChannel
-        return self.filterForChannel(from_, to, channel)
+        pass
 
 
     # Collect all tokens on specified channel to the left of
     #  the current token up until we see a token on DEFAULT_TOKEN_CHANNEL.
     #  If channel is -1, find any non default channel token.
     def getHiddenTokensToLeft(self, tokenIndex:int, channel:int=-1):
-        self.lazyInit()
-        if tokenIndex<0 or tokenIndex>=len(self.tokens):
-            raise Exception(str(tokenIndex) + " not in 0.." + str(len(self.tokens)-1))
-        from .Lexer import Lexer
-        prevOnChannel = self.previousTokenOnChannel(tokenIndex - 1, Lexer.DEFAULT_TOKEN_CHANNEL)
-        if prevOnChannel == tokenIndex - 1:
-            return None
-        # if none on channel to left, prevOnChannel=-1 then from=0
-        from_ = prevOnChannel+1
-        to = tokenIndex-1
-        return self.filterForChannel(from_, to, channel)
+        pass
 
 
     def filterForChannel(self, left:int, right:int, channel:int):
-        hidden = []
-        for i in range(left, right+1):
-            t = self.tokens[i]
-            if channel==-1:
-                from .Lexer import Lexer
-                if t.channel!= Lexer.DEFAULT_TOKEN_CHANNEL:
-                    hidden.append(t)
-            elif t.channel==channel:
-                    hidden.append(t)
-        if len(hidden)==0:
-            return None
-        return hidden
+        pass
 
     def getSourceName(self):
-        return self.tokenSource.getSourceName()
+        pass
 
     # Get the text of all tokens in this buffer.#/
     def getText(self, start:int=None, stop:int=None):

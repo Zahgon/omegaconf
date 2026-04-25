@@ -89,11 +89,7 @@ class ParseTreeMatch(object):
     # is returned.
     #
     def getAll(self, label:str):
-        nodes = self.labels.get(label, None)
-        if nodes is None:
-            return list()
-        else:
-            return nodes
+        pass
 
 
     #

@@ -91,7 +91,7 @@ def orContext(a:SemanticContext, b:SemanticContext):
         return result
 
 def filterPrecedencePredicates(collection:set):
-    return [context for context in collection if isinstance(context, PrecedencePredicate)]
+    pass
 
 
 class EmptySemanticContext(SemanticContext):

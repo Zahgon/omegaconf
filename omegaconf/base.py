@@ -79,13 +79,7 @@ class Metadata:
     @property
     def type_hint(self) -> Union[Type[Any], Any]:
         """Compute `type_hint` from `self.optional` and `self.ref_type`"""
-        # For compatibility with pickled OmegaConf objects created using older
-        # versions of OmegaConf, we store `ref_type` and `object_type`
-        # separately (rather than storing `type_hint` directly).
-        if self.optional:
-            return Optional[self.ref_type]
-        else:
-            return self.ref_type
+        pass
 
 
 @dataclass
@@ -351,9 +345,7 @@ class Node(ABC):
         return self._metadata.flags_root
 
     def _set_flags_root(self, flags_root: bool) -> None:
-        if self._metadata.flags_root != flags_root:
-            self._metadata.flags_root = flags_root
-            self._invalidate_flags_cache()
+        pass
 
     def _has_ref_type(self) -> bool:
         return self._metadata.ref_type is not Any
@@ -781,22 +773,12 @@ class Container(Box):
         def node_interpolation_callback(
             inter_key: str, memo: Optional[Set[int]]
         ) -> Optional["Node"]:
-            return self._resolve_node_interpolation(
-                inter_key=inter_key,
-                memo=memo,
-                resolved_node_cache=resolved_node_cache,
-            )
+            pass
 
         def resolver_interpolation_callback(
             name: str, args: Tuple[Any, ...], args_str: Tuple[str, ...]
         ) -> Any:
-            return self._evaluate_custom_resolver(
-                key=key,
-                node=node,
-                inter_type=name,
-                inter_args=args,
-                inter_args_str=args_str,
-            )
+            pass
 
         visitor = GrammarVisitor(
             node_interpolation_callback=node_interpolation_callback,

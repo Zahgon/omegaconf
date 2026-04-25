@@ -54,8 +54,6 @@ class CommonTokenFactory(TokenFactory):
         return t
 
     def createThin(self, type:int, text:str):
-        t = CommonToken(type=type)
-        t.text = text
-        return t
+        pass
 
 CommonTokenFactory.DEFAULT = CommonTokenFactory()

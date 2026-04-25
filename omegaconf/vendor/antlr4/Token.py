@@ -46,7 +46,7 @@ class Token (object):
 
     @property
     def text(self):
-        return self._text
+        pass
 
     # Explicitly set the text for this token. If {code text} is not
     # {@code null}, then {@link #getText} will return this value rather than
@@ -58,11 +58,11 @@ class Token (object):
 
     @text.setter
     def text(self, text:str):
-        self._text = text
+        pass
 
 
     def getTokenSource(self):
-        return self.source[0]
+        pass
 
     def getInputStream(self):
         return self.source[1]
@@ -100,29 +100,15 @@ class CommonToken(Token):
     # @param oldToken The token to copy.
      #
     def clone(self):
-        t = CommonToken(self.source, self.type, self.channel, self.start, self.stop)
-        t.tokenIndex = self.tokenIndex
-        t.line = self.line
-        t.column = self.column
-        t.text = self.text
-        return t
+        pass
 
     @property
     def text(self):
-        if self._text is not None:
-            return self._text
-        input = self.getInputStream()
-        if input is None:
-            return None
-        n = input.size
-        if self.start < n and self.stop < n:
-            return input.getText(self.start, self.stop)
-        else:
-            return "<EOF>"
+        pass
 
     @text.setter
     def text(self, text:str):
-        self._text = text
+        pass
 
     def __str__(self):
         with StringIO() as buf:

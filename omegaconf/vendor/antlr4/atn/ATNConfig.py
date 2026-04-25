@@ -155,5 +155,4 @@ class LexerATNConfig(ATNConfig):
 
 
     def checkNonGreedyDecision(self, source:LexerATNConfig, target:ATNState):
-        return source.passedThroughNonGreedyDecision \
-            or isinstance(target, DecisionState) and target.nonGreedy
+        pass

@@ -128,63 +128,31 @@ class OmegaConfDumper(BaseDumper):  # type: ignore
 
     @staticmethod
     def str_representer(dumper: yaml.Dumper, data: str) -> yaml.ScalarNode:
-        with_quotes = yaml_is_bool(data) or is_int(data) or is_float(data)
-        return dumper.represent_scalar(
-            yaml.resolver.BaseResolver.DEFAULT_SCALAR_TAG,
-            data,
-            style=("'" if with_quotes else None),
-        )
+        pass
 
     @staticmethod
     def pathlib_path_representer(dumper: yaml.Dumper, data: Any) -> yaml.Node:
         # Use old pathlib.Path tag for cross-version compatibility
         # Extract constructor args from __reduce__ and use sequence representation
-        return dumper.represent_sequence(  # pragma: no cover
-            "tag:yaml.org,2002:python/object/apply:pathlib.Path",
-            [str(data)],
-        )
+        pass
 
     @staticmethod
     def pathlib_posix_path_representer(dumper: yaml.Dumper, data: Any) -> yaml.Node:
         # Use old pathlib.PosixPath tag for cross-version compatibility
-        return dumper.represent_sequence(
-            "tag:yaml.org,2002:python/object/apply:pathlib.PosixPath",
-            [str(data)],
-        )
+        pass
 
     @staticmethod
     def pathlib_windows_path_representer(dumper: yaml.Dumper, data: Any) -> yaml.Node:
         # Use old pathlib.WindowsPath tag for cross-version compatibility
-        return dumper.represent_sequence(  # pragma: no cover
-            "tag:yaml.org,2002:python/object/apply:pathlib.WindowsPath",
-            [str(data)],
-        )
+        pass
 
 
 def get_omega_conf_dumper() -> Type[OmegaConfDumper]:
-    if not OmegaConfDumper.str_representer_added:
-        OmegaConfDumper.add_representer(str, OmegaConfDumper.str_representer)
-        OmegaConfDumper.str_representer_added = True
-
-    # Add representers for pathlib types to ensure cross-version compatibility.
-    # Python 3.13+ uses pathlib._local.* internally, so we normalize to old pathlib.* tags
-    if not OmegaConfDumper.pathlib_representers_added:
-        from pathlib import Path, PosixPath, WindowsPath
-
-        OmegaConfDumper.add_representer(Path, OmegaConfDumper.pathlib_path_representer)
-        OmegaConfDumper.add_representer(
-            PosixPath, OmegaConfDumper.pathlib_posix_path_representer
-        )
-        OmegaConfDumper.add_representer(
-            WindowsPath, OmegaConfDumper.pathlib_windows_path_representer
-        )
-        OmegaConfDumper.pathlib_representers_added = True
-
-    return OmegaConfDumper
+    pass
 
 
 def yaml_is_bool(b: str) -> bool:
-    return b in YAML_BOOL_TYPES
+    pass
 
 
 def get_yaml_loader() -> Any:
@@ -588,14 +556,14 @@ def is_structured_config(obj: Any) -> bool:
 
 
 def is_dataclass_frozen(type_: Any) -> bool:
-    return type_.__dataclass_params__.frozen  # type: ignore
+    pass
 
 
 def is_attr_frozen(type_: type) -> bool:
     # This is very hacky and probably fragile as well.
     # Unfortunately currently there isn't an official API in attr that can detect that.
     # noinspection PyProtectedMember
-    return type_.__setattr__ == attr._make._frozen_setattrs  # type: ignore
+    pass
 
 
 def get_type_of(class_or_object: Any) -> Type[Any]:
@@ -607,13 +575,7 @@ def get_type_of(class_or_object: Any) -> Type[Any]:
 
 
 def is_structured_config_frozen(obj: Any) -> bool:
-    type_ = get_type_of(obj)
-
-    if is_dataclass(type_):
-        return is_dataclass_frozen(type_)
-    if is_attr_class(type_):
-        return is_attr_frozen(type_)
-    return False
+    pass
 
 
 def _find_attrs_init_field_alias(field: Any) -> str:
@@ -754,11 +716,7 @@ def _is_special(value: Any) -> bool:
 
 
 def is_float(st: str) -> bool:
-    try:
-        float(st)
-        return True
-    except ValueError:
-        return False
+    pass
 
 
 def is_int(st: str) -> bool:
@@ -863,20 +821,11 @@ def get_dict_key_value_types(ref_type: Any) -> Tuple[Any, Any]:
 
 
 def is_valid_value_annotation(type_: Any) -> bool:
-    _, type_ = _resolve_optional(type_)
-    return (
-        type_ is Any
-        or is_primitive_type_annotation(type_)
-        or is_structured_config(type_)
-        or is_container_annotation(type_)
-        or is_supported_union_annotation(type_)
-    )
+    pass
 
 
 def _valid_dict_key_annotation_type(type_: Any) -> bool:
-    from omegaconf import DictKeyType
-
-    return type_ is None or type_ is Any or issubclass(type_, DictKeyType.__args__)  # type: ignore
+    pass
 
 
 def is_primitive_type_annotation(type_: Any) -> bool:
@@ -1116,7 +1065,7 @@ def is_generic_list(type_: Any) -> bool:
     :param type_: variable type
     :return: bool
     """
-    return is_list_annotation(type_) and get_list_element_type(type_) is not None
+    pass
 
 
 def is_generic_dict(type_: Any) -> bool:
@@ -1129,7 +1078,7 @@ def is_generic_dict(type_: Any) -> bool:
     :param type_: variable type
     :return: bool
     """
-    return is_dict_annotation(type_) and len(get_dict_key_value_types(type_)) > 0
+    pass
 
 
 def is_container_annotation(type_: Any) -> bool:

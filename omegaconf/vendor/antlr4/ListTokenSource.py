@@ -52,24 +52,7 @@ class ListTokenSource(TokenSource):
     #
     @property
     def column(self):
-        if self.pos < len(self.tokens):
-            return self.tokens[self.pos].column
-        elif self.eofToken is not None:
-            return self.eofToken.column
-        elif len(self.tokens) > 0:
-            # have to calculate the result from the line/column of the previous
-            # token, along with the text of the token.
-            lastToken = self.tokens[len(self.tokens) - 1]
-            tokenText = lastToken.text
-            if tokenText is not None:
-                lastNewLine = tokenText.rfind('\n')
-                if lastNewLine >= 0:
-                    return len(tokenText) - lastNewLine - 1
-            return lastToken.column + lastToken.stop - lastToken.start + 1
-
-        # only reach this if tokens is empty, meaning EOF occurs at the first
-        # position in the input
-        return 0
+        pass
 
     #
     # {@inheritDoc}
@@ -97,25 +80,7 @@ class ListTokenSource(TokenSource):
     #
     @property
     def line(self):
-        if self.pos < len(self.tokens):
-            return self.tokens[self.pos].line
-        elif self.eofToken is not None:
-            return self.eofToken.line
-        elif len(self.tokens) > 0:
-            # have to calculate the result from the line/column of the previous
-            # token, along with the text of the token.
-            lastToken = self.tokens[len(self.tokens) - 1]
-            line = lastToken.line
-            tokenText = lastToken.text
-            if tokenText is not None:
-                line += tokenText.count('\n')
-
-            # if no text is available, assume the token did not contain any newline characters.
-            return line
-
-        # only reach this if tokens is empty, meaning EOF occurs at the first
-        # position in the input
-        return 1
+        pass
 
     #
     # {@inheritDoc}
@@ -135,10 +100,4 @@ class ListTokenSource(TokenSource):
     # {@inheritDoc}
     #
     def getSourceName(self):
-        if self.sourceName is not None:
-            return self.sourceName
-        inputStream = self.getInputStream()
-        if inputStream is not None:
-            return inputStream.getSourceName()
-        else:
-            return "List"
+        pass

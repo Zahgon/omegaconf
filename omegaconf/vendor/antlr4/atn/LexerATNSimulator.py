@@ -86,10 +86,7 @@ class LexerATNSimulator(ATNSimulator):
 
 
     def copyState(self, simulator:LexerATNSimulator ):
-        self.column = simulator.column
-        self.line = simulator.line
-        self.mode = simulator.mode
-        self.startIndex = simulator.startIndex
+        pass
 
     def match(self, input:InputStream , mode:int):
         self.mode = mode
@@ -542,7 +539,7 @@ class LexerATNSimulator(ATNSimulator):
         return newState
 
     def getDFA(self, mode:int):
-        return self.decisionToDFA[mode]
+        pass
 
     # Get the text matched so far for the current token.
     def getText(self, input:InputStream):

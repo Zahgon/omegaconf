@@ -32,45 +32,37 @@ class TokenStreamRewriter(object):
         return self.tokens
 
     def rollback(self, instruction_index, program_name):
-        ins = self.programs.get(program_name, None)
-        if ins:
-            self.programs[program_name] = ins[self.MIN_TOKEN_INDEX: instruction_index]
+        pass
 
     def deleteProgram(self, program_name=DEFAULT_PROGRAM_NAME):
-        self.rollback(self.MIN_TOKEN_INDEX, program_name)
+        pass
 
     def insertAfterToken(self, token, text, program_name=DEFAULT_PROGRAM_NAME):
-        self.insertAfter(token.tokenIndex, text, program_name)
+        pass
 
     def insertAfter(self, index, text, program_name=DEFAULT_PROGRAM_NAME):
-        op = self.InsertAfterOp(self.tokens, index + 1, text)
-        rewrites = self.getProgram(program_name)
-        op.instructionIndex = len(rewrites)
-        rewrites.append(op)
+        pass
 
     def insertBeforeIndex(self, index, text):
-        self.insertBefore(self.DEFAULT_PROGRAM_NAME, index, text)
+        pass
 
     def insertBeforeToken(self, token, text, program_name=DEFAULT_PROGRAM_NAME):
-        self.insertBefore(program_name, token.tokenIndex, text)
+        pass
 
     def insertBefore(self, program_name, index, text):
-        op = self.InsertBeforeOp(self.tokens, index, text)
-        rewrites = self.getProgram(program_name)
-        op.instructionIndex = len(rewrites)
-        rewrites.append(op)
+        pass
 
     def replaceIndex(self, index, text):
-        self.replace(self.DEFAULT_PROGRAM_NAME, index, index, text)
+        pass
 
     def replaceRange(self, from_idx, to_idx, text):
-        self.replace(self.DEFAULT_PROGRAM_NAME, from_idx, to_idx, text)
+        pass
 
     def replaceSingleToken(self, token, text):
-        self.replace(self.DEFAULT_PROGRAM_NAME, token.tokenIndex, token.tokenIndex, text)
+        pass
 
     def replaceRangeTokens(self, from_token, to_token, text, program_name=DEFAULT_PROGRAM_NAME):
-        self.replace(program_name, from_token.tokenIndex, to_token.tokenIndex, text)
+        pass
 
     def replace(self, program_name, from_idx, to_idx, text):
         if any((from_idx > to_idx, from_idx < 0, to_idx < 0, to_idx >= len(self.tokens.tokens))):
@@ -82,28 +74,25 @@ class TokenStreamRewriter(object):
         rewrites.append(op)
 
     def deleteToken(self, token):
-        self.delete(self.DEFAULT_PROGRAM_NAME, token, token)
+        pass
 
     def deleteIndex(self, index):
-        self.delete(self.DEFAULT_PROGRAM_NAME, index, index)
+        pass
 
     def delete(self, program_name, from_idx, to_idx):
-        if isinstance(from_idx, Token):
-            self.replace(program_name, from_idx.tokenIndex, to_idx.tokenIndex, "")
-        else:
-            self.replace(program_name, from_idx, to_idx, "")
+        pass
 
     def lastRewriteTokenIndex(self, program_name=DEFAULT_PROGRAM_NAME):
-        return self.lastRewriteTokenIndexes.get(program_name, -1)
+        pass
 
     def setLastRewriteTokenIndex(self, program_name, i):
-        self.lastRewriteTokenIndexes[program_name] = i
+        pass
 
     def getProgram(self, program_name):
         return self.programs.setdefault(program_name, [])
 
     def getDefaultText(self):
-        return self.getText(self.DEFAULT_PROGRAM_NAME, 0, len(self.tokens.tokens) - 1)
+        pass
 
     def getText(self, program_name, start:int, stop:int):
         """

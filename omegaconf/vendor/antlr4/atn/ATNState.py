@@ -125,10 +125,10 @@ class ATNState(object):
         return isinstance(other, ATNState) and self.stateNumber==other.stateNumber
 
     def onlyHasEpsilonTransitions(self):
-        return self.epsilonOnlyTransitions
+        pass
 
     def isNonGreedyExitState(self):
-        return False
+        pass
 
     def __str__(self):
         return str(self.stateNumber)
